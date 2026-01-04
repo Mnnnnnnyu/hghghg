@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>MikPay</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+* {
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: linear-gradient(135deg, #5865f2, #7b8cff);
+}
+
+.wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.app {
+  width: 360px;
+  background: #fff;
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 25px 60px rgba(0,0,0,.3);
+}
+
+h1, h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+label {
+  font-size: 14px;
+  display: block;
+  margin-bottom: 4px;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 14px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  background: #5865f2;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.secondary {
+  background: #e6e8ef;
+  color: #000;
+}
+
+.hidden {
+  display: none;
+}
+
+.balance {
+  text-align: center;
+  font-size: 26px;
+  margin: 20px 0;
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+<div class="app">
+
+<!-- СТАРТ -->
+<div id="start">
+  <h1>MikPay</h1>
+  <button onclick="showLogin()">Войти</button>
+  <button class="secondary" onclick="showRegister()">Регистрация</button>
+</div>
+
+<!-- РЕГИСТРАЦИЯ -->
+<div id="register" class="hidden">
+  <h2>Регистрация</h2>
+
+  <label>Email</label>
+  <input id="regEmail" type="email">
+
+  <label>Пароль</label>
+  <input id="regPass" type="password">
+
+  <button onclick="register()">Создать аккаунт</button>
+  <button class="secondary" onclick="back()">Назад</button>
+</div>
+
+<!-- ВХОД -->
+<div id="login" class="hidden">
+  <h2>Вход</h2>
+
+  <label>Email</label>
+  <input id="logEmail" type="email">
+
+  <label>Пароль</label>
+  <input id="logPass" type="password">
+
+  <button onclick="login()">Войти</button>
+  <button class="secondary" onclick="back()">Назад</button>
+</div>
+
+<!-- ГЛАВНАЯ -->
+<div id="main" class="hidden">
+  <h2>Главная</h2>
+  <div class="balance">Баланс: 0 ₽</div>
+  <button onclick="logout()">Выйти</button>
+</div>
+
+</div>
+</div>
+
+<script>
+function hideAll() {
+  start.classList.add("hidden");
+  register.classList.add("hidden");
+  login.classList.add("hidden");
+  main.classList.add("hidden");
+}
+
+function back() {
+  hideAll();
+  start.classList.remove("hidden");
+}
+
+function showRegister() {
+  hideAll();
+  register.classList.remove("hidden");
+}
+
+function showLogin() {
+  hideAll();
+  login.classList.remove("hidden");
+}
+
+function register() {
+  if (!regEmail.value || !regPass.value) {
+    alert("Заполни все поля");
+    return;
+  }
+
+  localStorage.setItem("mikpay_user", JSON.stringify({
+    email: regEmail.value,
+    pass: regPass.value,
+    balance: 0
+  }));
+
+  alert("Аккаунт создан");
+  showLogin();
+}
+
+function login() {
+  const user = JSON.parse(localStorage.getItem("mikpay_user"));
+
+  if (!user ||
+      user.email !== logEmail.value ||
+      user.pass !== logPass.value) {
+    alert("Неверный email или пароль");
+    return;
+  }
+
+  hideAll();
+  main.classList.remove("hidden");
+}
+
+function logout() {
+  back();
+}
+</script>
+
+</body>
+</html>
